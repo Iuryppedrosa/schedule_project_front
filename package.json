@@ -11,16 +11,20 @@
     "type-check": "vue-tsc --build --force",
     "lint": "eslint . --fix",
     "format": "prettier --write src/",
-    "mock-api": "json-server --watch db.json --port 3000"
+    "mock-api": "json-server --watch db.json --port 3000",
+    "quasar": "quasar"
   },
   "dependencies": {
     "@quasar/extras": "^1.16.13",
+    "@quasar/quasar-ui-qcalendar": "^4.0.0-beta.16",
     "pinia": "^2.2.6",
     "quasar": "^2.17.4",
     "vue": "^3.5.12",
+    "vue-cal": "^4.10.0",
     "vue-router": "^4.4.5"
   },
   "devDependencies": {
+    "@quasar/cli": "^2.4.1",
     "@quasar/vite-plugin": "^1.8.1",
     "@tsconfig/node22": "^22.0.0",
     "@types/node": "^22.9.0",

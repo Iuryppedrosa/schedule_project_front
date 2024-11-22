@@ -43,3 +43,13 @@ export interface AdminActionLog {
   action: string
   timestamp: string // ISO 8601 format
 }
+
+export interface Event {
+  start: string
+  end: string
+  title: string
+}
+
+export interface EventsList {
+  events: Event[]
+}

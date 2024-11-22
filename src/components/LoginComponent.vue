@@ -23,6 +23,7 @@
           <q-toggle v-model="accept" label="Eu aceito os termos de licenca" />
           <div class="bottons">
             <q-btn label="Submit" type="submit" color="primary" />
+
             <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
           </div>
         </q-form>
@@ -74,6 +75,9 @@ export default defineComponent({
       if (foundUser) {
         this.loadingMethod()
         this.notifyMethod('Login efetuado com sucesso', 'positive')
+        setTimeout(() => {
+          this.$router.push({ name: 'schedule' })
+        }, 2000)
       } else {
         this.loadingMethod()
         this.notifyMethod('Usuário ou senha inválidos', 'negative')

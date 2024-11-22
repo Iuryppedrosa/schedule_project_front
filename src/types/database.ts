@@ -1,4 +1,12 @@
-import type { User, SportCourt, Schedule, Notification, AdminActionLog } from '../types'
+import type {
+  User,
+  SportCourt,
+  Schedule,
+  Notification,
+  AdminActionLog,
+  Event,
+  EventsList,
+} from '../types'
 
 export interface Database {
   users: User[]
@@ -6,4 +14,6 @@ export interface Database {
   schedules: Schedule[]
   notifications: Notification[]
   adminActionLogs: AdminActionLog[]
+  event: Event
+  eventsList: EventsList
 }
