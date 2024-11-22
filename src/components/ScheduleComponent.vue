@@ -1,7 +1,6 @@
 <template>
   <div class="q-pa-md">
     <vue-cal
-      style="height: 1000px"
       :events="events"
       :selected-date="'2018-11-19'"
       active-view="month"

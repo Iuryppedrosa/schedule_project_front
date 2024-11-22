@@ -76,7 +76,7 @@ export default defineComponent({
         this.loadingMethod()
         this.notifyMethod('Login efetuado com sucesso', 'positive')
         setTimeout(() => {
-          this.$router.push({ name: 'schedule' })
+          this.$router.push({ name: 'home' })
         }, 2000)
       } else {
         this.loadingMethod()
