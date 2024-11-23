@@ -5,12 +5,25 @@
       :selected-date="'2018-11-19'"
       active-view="month"
       :time-from="10 * 60"
-      hide-weekends
       events-on-month-view
+      :on-event-click="onEventClick"
     >
       <template #event="{ event }">
         <div class="event-badge">
           <span v-html="event.title"></span>
+          <q-btn
+            dense
+            style="
+              width: 25px;
+              height: 10px;
+              position: absolute;
+              top: 0;
+              right: 0;
+              margin: 4px 4px 0 0;
+              padding-bottom: 2px;
+            "
+            icon="close"
+          />
           <hr />
           <em>
             <strong>Event start:</strong> {{ formatTime(event.start) }}<br />
@@ -48,6 +61,10 @@ export default defineComponent({
       }
       return new Date(date).toLocaleTimeString([], options)
     },
+    onEventClick(event, e) {
+      console.log('Event clicked:', event)
+      console.log('Event clicked (mouse event):', e)
+    },
   },
   async created() {
     try {
@@ -79,6 +96,20 @@ export default defineComponent({
   border-radius: 4px;
 }
 
+.event-badge span {
+  font-weight: bold;
+}
+
+.event-badge .q-btn.close {
+  min-width: unset;
+  position: absolute;
+  width: 10px;
+  height: 5px;
+  top: 0;
+  right: 0;
+  margin: 4px;
+}
+
 hr {
   width: 100%;
   border: none;
@@ -89,5 +120,9 @@ hr {
 em {
   font-style: normal;
   color: #555;
+}
+
+.custom-event {
+  cursor: pointer;
 }
 </style>

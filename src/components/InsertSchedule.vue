@@ -1,11 +1,18 @@
 <template>
   <!-- Modal -->
-  <q-card style="min-width: 400px" v-if="isModalOpen">
+  <q-card style="min-width: 400px" v-if="isVisible">
     <q-card-section>
       <div class="text-h6">Novo Evento</div>
     </q-card-section>
 
     <q-card-section>
+      <q-input
+        v-model="eventData.ano"
+        label="Dia"
+        mask="##/##/####"
+        placeholder="DD/MM/YYYY"
+        filled
+      />
       <q-input
         v-model="eventData.start"
         label="Hora de Início"
@@ -24,7 +31,7 @@
     </q-card-section>
 
     <q-card-actions align="right">
-      <q-btn flat label="Cancelar" color="negative" @click="closeModal" />
+      <q-btn flat label="Cancelar" color="negative" @click="$emit('close')" />
       <q-btn flat label="Salvar" color="primary" @click="saveEvent" />
     </q-card-actions>
   </q-card>
@@ -34,21 +41,25 @@
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'InsertSchedule',
+  props: {
+    isVisible: {
+      type: Boolean,
+      required: true,
+    },
+  },
   data() {
     return {
       eventData: {
         start: '',
         end: '',
         title: '',
+        ano: '',
       },
-      isModalOpen: false,
+      isInsertVisible: false,
       events: [],
     }
   },
   methods: {
-    closeModal() {
-      this.isModalOpen = false
-    },
     saveEvent() {
       if (this.eventData.start && this.eventData.end && this.eventData.title) {
         this.events.push({ ...this.eventData })
@@ -67,9 +78,6 @@ export default defineComponent({
         })
       }
     },
-  },
-  created() {
-    this.isModalOpen = true
   },
 })
 </script>

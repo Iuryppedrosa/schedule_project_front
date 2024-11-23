@@ -21,7 +21,7 @@
       >
         <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: '0' }">
           <q-list padding>
-            <q-item clickable v-ripple @click="toggleInsertSchedule">
+            <q-item clickable v-ripple @click="isInsertVisible = true">
               <q-item-section avatar>
                 <q-icon name="inbox" />
               </q-item-section>
@@ -60,7 +60,11 @@
 
       <q-page-container>
         <router-view></router-view>
-        <insert-schedule v-if="isInsertScheduleVisible" class="floating-schedule" />
+        <insert-schedule
+          :isVisible="isInsertVisible"
+          @close="isInsertVisible = false"
+          class="floating-schedule"
+        />
       </q-page-container>
     </q-layout>
   </div>
@@ -79,15 +83,10 @@ export default defineComponent({
     return {
       drawer: false,
       miniState: true,
-      isInsertScheduleVisible: false,
+      isInsertVisible: false,
     }
   },
-  methods: {
-    toggleInsertSchedule() {
-      this.isInsertScheduleVisible = !this.isInsertScheduleVisible
-      console.log('toggleInsertSchedule', this.isInsertScheduleVisible)
-    },
-  },
+  methods: {},
 })
 </script>
 <style scoped>
