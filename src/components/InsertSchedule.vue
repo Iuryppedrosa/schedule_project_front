@@ -1,6 +1,5 @@
 <template>
-  <!-- Modal -->
-  <q-card style="min-width: 400px" v-if="isVisible">
+  <q-card v-if="isVisible">
     <q-card-section>
       <div class="text-h6">Novo Evento</div>
     </q-card-section>

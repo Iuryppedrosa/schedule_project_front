@@ -1,13 +1,32 @@
 <template>
   <div class="q-pa-md">
+    <q-btn
+      :style="{ width: '100%' }"
+      class="btn-insert-user"
+      color="black"
+      label="Inserir Usuários"
+      icon="lightbulb_outline"
+      icon-align="left"
+      @click="showInsertUserModal"
+    />
     <q-table title="Usuários" :rows="rows" :columns="columns" row-key="name" />
+
+    <InsertUser
+      :isVisible="isInsertVisible"
+      @close="closeInsertUserModal"
+      class="floating-insert-user"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import InsertUser from './InsertUser.vue'
 export default defineComponent({
   name: 'UserListComponent',
+  components: {
+    InsertUser,
+  },
   data() {
     return {
       columns: [
@@ -54,9 +73,57 @@ export default defineComponent({
           protein: 3.9,
         },
       ],
+      isInsertVisible: false,
     }
+  },
+  methods: {
+    showInsertUserModal() {
+      this.isInsertVisible = true
+    },
+    closeInsertUserModal() {
+      this.isInsertVisible = false
+      this.newUserData = { federalId: '', name: '', email: '', contact: '' }
+    },
   },
 })
 </script>
 
-<style></style>
+<style>
+.floating-insert-user {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  width: 80%;
+  max-width: 400px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 1);
+  padding: 20px;
+  display: block;
+}
+
+.btn-insert-user {
+  font-weight: bold;
+  color: white;
+  background-color: #000000;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.q-btn__content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.q-btn__icon {
+  font-size: 20px;
+}
+</style>
