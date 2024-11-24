@@ -21,20 +21,28 @@
       >
         <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: '0' }">
           <q-list padding>
+            <q-item clickable v-ripple tag="router-link" :to="{ name: 'schedule' }">
+              <q-item-section avatar>
+                <q-icon name="send" />
+              </q-item-section>
+
+              <q-item-section> Agenda </q-item-section>
+            </q-item>
+
             <q-item clickable v-ripple @click="isInsertVisible = true">
               <q-item-section avatar>
                 <q-icon name="inbox" />
               </q-item-section>
 
-              <q-item-section> Inbox </q-item-section>
+              <q-item-section> Inserir Agenda </q-item-section>
             </q-item>
 
-            <q-item active clickable v-ripple>
+            <q-item clickable v-ripple tag="router-link" :to="{ name: 'users' }">
               <q-item-section avatar>
                 <q-icon name="star" />
               </q-item-section>
 
-              <q-item-section> Star </q-item-section>
+              <q-item-section> Usuários </q-item-section>
             </q-item>
 
             <q-item clickable v-ripple>
@@ -47,12 +55,14 @@
 
             <q-separator />
 
-            <q-item clickable v-ripple>
+            <q-item clickable v-ripple @click="logout" class="logout-button">
               <q-item-section avatar>
-                <q-icon name="drafts" />
+                <q-icon name="exit_to_app" color="red" />
               </q-item-section>
 
-              <q-item-section> Drafts </q-item-section>
+              <q-item-section>
+                <span class="logout-text">Sair</span>
+              </q-item-section>
             </q-item>
           </q-list>
         </q-scroll-area>
@@ -73,6 +83,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import InsertSchedule from './InsertSchedule.vue'
+import { Loading } from 'quasar'
+import { useUserStore } from '../stores/userStore'
 
 export default defineComponent({
   name: 'HomeComponent',
@@ -86,7 +98,42 @@ export default defineComponent({
       isInsertVisible: false,
     }
   },
-  methods: {},
+  methods: {
+    async logout() {
+      const userStore = useUserStore()
+
+      try {
+        Loading.show({
+          message: 'Carregando...',
+          spinnerSize: 150,
+          spinnerColor: 'blue',
+          backgroundColor: 'white',
+        })
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        userStore.logoutUser()
+        this.$router.push({ name: 'login' })
+      } catch (error) {
+        this.$q.notify({
+          color: 'negative',
+          position: 'top',
+          message: error.response?.data?.message || 'Erro ao realizar o logout.',
+        })
+      } finally {
+        Loading.hide()
+      }
+    },
+    testLoading() {
+      Loading.show({
+        message: 'Teste de carregamento...',
+        spinnerSize: 150,
+        spinnerColor: 'blue',
+        backgroundColor: 'white',
+      })
+      setTimeout(() => {
+        Loading.hide()
+      }, 2000)
+    },
+  },
 })
 </script>
 <style scoped>
@@ -101,5 +148,24 @@ export default defineComponent({
   border-radius: 8px;
   padding: 16px;
   min-width: 400px;
+}
+
+.logout-button {
+  color: red;
+  background-color: #ffe6e6;
+  border-radius: 8px;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
+}
+
+.logout-button:hover {
+  background-color: #ffcccc;
+  transform: scale(1.05);
+}
+
+.logout-text {
+  font-weight: bold;
+  font-size: 1.1em;
 }
 </style>
