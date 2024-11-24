@@ -5,7 +5,7 @@
         <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
           <q-input
             filled
-            v-model="userInput.username"
+            v-model="userInput.email"
             label="Digite seu login"
             hint="Nome ou Cpf"
             lazy-rules
@@ -29,36 +29,28 @@
         </q-form>
       </div>
     </q-card>
-    <div>
-      {{ users }}
-    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import apimixin from '../api/api'
 import { QForm, QInput, QToggle, QBtn } from 'quasar'
 import { Loading } from 'quasar'
+import { useUserStore } from '../stores/userStore'
 export default defineComponent({
   components: { QForm, QInput, QToggle, QBtn },
   name: 'LoginComponent',
-  mixins: [apimixin],
   data() {
     return {
-      users: {
-        username: '',
-        password: '',
-      },
       userInput: {
-        username: '',
+        email: '',
         password: '',
       },
       accept: false,
     }
   },
   methods: {
-    onSubmit() {
+    async onSubmit() {
       if (!this.accept) {
         this.$q.notify({
           color: 'negative',
@@ -67,20 +59,29 @@ export default defineComponent({
         })
         return
       }
-      const foundUser = this.users.find(
-        (user) =>
-          user.username === this.userInput.username &&
-          user.password_hash === this.userInput.password,
-      )
-      if (foundUser) {
-        this.loadingMethod()
-        this.notifyMethod('Login efetuado com sucesso', 'positive')
-        setTimeout(() => {
-          this.$router.push({ name: 'home' })
-        }, 2000)
-      } else {
-        this.loadingMethod()
-        this.notifyMethod('Usuário ou senha inválidos', 'negative')
+      const userStore = useUserStore()
+      try {
+        Loading.show({
+          message: 'Carregando...',
+          spinnerSize: 150,
+          spinnerColor: 'blue',
+          backgroundColor: 'white',
+        })
+        await userStore.loginUser(this.userInput)
+        this.$q.notify({
+          color: 'positive',
+          position: 'top',
+          message: 'Login efetuado com sucesso!',
+        })
+        this.$router.push({ name: 'home' })
+      } catch (error) {
+        this.$q.notify({
+          color: 'negative',
+          position: 'top',
+          message: error.response?.data?.message || 'Erro ao realizar o login.',
+        })
+      } finally {
+        Loading.hide()
       }
     },
     onReset() {
@@ -88,32 +89,6 @@ export default defineComponent({
       this.userInput.password = ''
       this.accept = false
     },
-    loadingMethod() {
-      Loading.show({
-        message: 'Carregando...',
-        spinnerSize: 150,
-        spinnerColor: 'blue',
-        backgroundColor: 'white',
-      })
-      setTimeout(() => {
-        Loading.hide()
-      }, 2000)
-    },
-    notifyMethod(messageCheck: string, colorCheck: string) {
-      setTimeout(() => {
-        this.$q.notify({
-          color: colorCheck,
-          position: 'top',
-          message: messageCheck,
-        })
-      }, 4000)
-    },
-  },
-  async created() {
-    const users = await this.fetchData('user')
-    if (users) {
-      this.users = users
-    }
   },
 })
 </script>

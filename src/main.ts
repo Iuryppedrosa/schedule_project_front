@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { Quasar, Notify, Loading } from 'quasar'
 import App from './App.vue'
-import router from './router'
+import router from './router/router'
 import Plugin from '@quasar/quasar-ui-qcalendar/dist/QCalendarDay.esm.js'
 import '@quasar/quasar-ui-qcalendar/dist/QCalendarDay.min.css'
 
