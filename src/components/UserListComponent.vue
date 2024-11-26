@@ -9,7 +9,20 @@
       icon-align="left"
       @click="showInsertUserModal"
     />
-    <q-table title="Usuários" :rows="rows" :columns="columns" row-key="name" />
+    <q-table
+      title="Usuários"
+      :rows="rows"
+      :columns="columns"
+      no-data-label="Nao existe usuários"
+      row-key="id"
+    >
+      <template v-slot:body-cell-actions="props">
+        <q-td auto-width>
+          <q-btn flat dense icon="edit" color="blue" @click="editRow(props.row)" />
+          <q-btn flat dense icon="delete" color="red" @click="deleteRow(props.row)" />
+        </q-td>
+      </template>
+    </q-table>
 
     <InsertUser
       :isVisible="isInsertVisible"
@@ -21,6 +34,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { User } from '../types/userTypes'
+import { getAllUsers } from '../api/user_api'
 import InsertUser from './InsertUser.vue'
 export default defineComponent({
   name: 'UserListComponent',
@@ -29,54 +44,46 @@ export default defineComponent({
   },
   data() {
     return {
+      userData: [] as User[],
       columns: [
-        { name: 'name', label: 'Name', align: 'left' as const, field: 'name' },
-        { name: 'calories', label: 'Calories', align: 'center' as const, field: 'calories' },
-        { name: 'fat', label: 'Fat (g)', align: 'center' as const, field: 'fat' },
-        { name: 'carbs', label: 'Carbs (g)', align: 'center' as const, field: 'carbs' },
-        { name: 'protein', label: 'Protein (g)', align: 'center' as const, field: 'protein' },
+        { name: 'name', label: 'Nome', align: 'left' as const, field: 'name', sortable: true },
+        {
+          name: 'federalId',
+          label: 'ID Federal',
+          align: 'left' as const,
+          field: 'federalId',
+          sortable: true,
+        },
+        { name: 'email', label: 'E-mail', align: 'left' as const, field: 'email', sortable: true },
+        {
+          name: 'contact',
+          label: 'Contato',
+          align: 'left' as const,
+          field: 'contact',
+          sortable: true,
+        },
+        { name: 'actions', field: 'actions', label: 'Editar/Excluir', align: 'center' as const },
       ],
-      rows: [
-        {
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-        },
-        {
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-        },
-        {
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 24,
-          protein: 6.0,
-        },
-        {
-          name: 'Cupcake',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-        },
-        {
-          name: 'Gingerbread',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-        },
-      ],
+      rows: [] as User[],
       isInsertVisible: false,
     }
   },
   methods: {
+    async fetchUsers() {
+      try {
+        const users = await getAllUsers()
+        this.userData = users
+        this.rows = users.map((user) => ({
+          id: user.id,
+          name: user.name,
+          federalId: user.federalId,
+          email: user.email,
+          contact: user.contact,
+        }))
+      } catch (error) {
+        console.error(error)
+      }
+    },
     showInsertUserModal() {
       this.isInsertVisible = true
     },
@@ -84,6 +91,17 @@ export default defineComponent({
       this.isInsertVisible = false
       this.newUserData = { federalId: '', name: '', email: '', contact: '' }
     },
+    editRow(row) {
+      console.log('Editar:', row)
+      // Lógica de edição aqui
+    },
+    deleteRow(row) {
+      console.log('Excluir:', row)
+      // Lógica de exclusão aqui
+    },
+  },
+  created() {
+    this.fetchUsers()
   },
 })
 </script>
