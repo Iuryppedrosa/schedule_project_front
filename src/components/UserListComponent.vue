@@ -18,8 +18,8 @@
     >
       <template v-slot:body-cell-actions="props">
         <q-td auto-width>
-          <q-btn flat dense icon="edit" color="blue" @click="editRow(props.row)" />
-          <q-btn flat dense icon="delete" color="red" @click="deleteRow(props.row)" />
+          <q-btn flat dense icon="edit" color="blue" @click="showEditUserModal(props.row)" />
+          <q-btn flat dense icon="delete" color="red" @click="showDeleteUserModal(props.row)" />
         </q-td>
       </template>
     </q-table>
@@ -29,6 +29,23 @@
       @close="closeInsertUserModal"
       class="floating-insert-user"
     />
+
+    <EditUserComponent
+      :isVisible="isEditVisible"
+      @close="closeEditUserModal"
+      class="float-edit-user"
+      :userDataId="userDataId"
+      @data-updated="onDataUpdated"
+    />
+
+    <q-dialog v-model="isDeleteVisible" class="floating-delete-user">
+      <DeleteUserComponent
+        :isVisible="isDeleteVisible"
+        :userData="userData"
+        @close="closeDeleteUserModal"
+        @confirm="onDataUpdated"
+      />
+    </q-dialog>
   </div>
 </template>
 
@@ -37,10 +54,16 @@ import { defineComponent } from 'vue'
 import { User } from '../types/userTypes'
 import { getAllUsers } from '../api/user_api'
 import InsertUser from './InsertUser.vue'
+import EditUserComponent from './EditUserComponent.vue'
+import { Loading } from 'quasar'
+import DeleteUserComponent from './DeleteUserComponent.vue'
+
 export default defineComponent({
   name: 'UserListComponent',
   components: {
     InsertUser,
+    EditUserComponent,
+    DeleteUserComponent,
   },
   data() {
     return {
@@ -66,14 +89,23 @@ export default defineComponent({
       ],
       rows: [] as User[],
       isInsertVisible: false,
+      isEditVisible: false,
+      isDeleteVisible: false,
+      userDataId: 0,
     }
   },
   methods: {
     async fetchUsers() {
       try {
+        Loading.show({
+          message: 'Carregando...',
+          spinnerSize: 150,
+          spinnerColor: 'blue',
+          backgroundColor: 'white',
+        })
         const users = await getAllUsers()
         this.userData = users
-        this.rows = users.map((user) => ({
+        this.rows = this.userData.map((user) => ({
           id: user.id,
           name: user.name,
           federalId: user.federalId,
@@ -82,22 +114,37 @@ export default defineComponent({
         }))
       } catch (error) {
         console.error(error)
+      } finally {
+        Loading.hide()
       }
+    },
+    onDataUpdated() {
+      this.fetchUsers()
     },
     showInsertUserModal() {
       this.isInsertVisible = true
     },
+    showEditUserModal(row) {
+      this.isEditVisible = true
+      this.userDataId = row.id
+    },
+    showDeleteUserModal(row) {
+      this.isDeleteVisible = true
+      this.userData = row
+    },
+
     closeInsertUserModal() {
       this.isInsertVisible = false
       this.newUserData = { federalId: '', name: '', email: '', contact: '' }
     },
-    editRow(row) {
-      console.log('Editar:', row)
-      // Lógica de edição aqui
+    closeEditUserModal() {
+      this.isEditVisible = false
+      this.newUserData = { federalId: '', name: '', email: '', contact: '' }
+      this.userDataId = 0
     },
-    deleteRow(row) {
-      console.log('Excluir:', row)
-      // Lógica de exclusão aqui
+    closeDeleteUserModal() {
+      this.isDeleteVisible = false
+      this.userData = { federalId: '', name: '', email: '', contact: '' }
     },
   },
   created() {
@@ -108,6 +155,21 @@ export default defineComponent({
 
 <style>
 .floating-insert-user {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  width: 80%;
+  max-width: 400px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 1);
+  padding: 20px;
+  display: block;
+}
+
+.float-edit-user {
   position: fixed;
   top: 50%;
   left: 50%;
