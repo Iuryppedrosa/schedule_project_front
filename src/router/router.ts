@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import LoginComponent from '../components/LoginComponent.vue'
-import ScheduleComponent from '../components/ScheduleComponent.vue'
-import HomeComponent from '../components/HomeComponent.vue'
-import UserListComponent from '../components/UserListComponent.vue'
+import LoginComponent from '../components/_login/LoginComponent.vue'
+import ScheduleComponent from '../components/_schedule/ScheduleComponent.vue'
+import HomeComponent from '../components/_home/HomeComponent.vue'
+import UserListComponent from '../components/_user/UserListComponent.vue'
 const router = createRouter({
   history: createWebHistory(),
   routes: [

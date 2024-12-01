@@ -25,7 +25,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { QDialog, QCard, QCardSection, QCardActions, QBtn, QIcon } from 'quasar'
-import { deleteUser } from '../api/user_api'
+import { deleteUser } from '../../api/user_api'
 import { Loading } from 'quasar'
 
 export default defineComponent({

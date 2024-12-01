@@ -82,9 +82,9 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import InsertSchedule from './InsertSchedule.vue'
+import InsertSchedule from '../_schedule/InsertSchedule.vue'
 import { Loading } from 'quasar'
-import { useUserStore } from '../stores/userStore'
+import { useUserStore } from '../../stores/userStore'
 
 export default defineComponent({
   name: 'HomeComponent',

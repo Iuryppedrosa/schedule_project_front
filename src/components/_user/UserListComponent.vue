@@ -51,8 +51,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { User } from '../types/userTypes'
-import { getAllUsers } from '../api/user_api'
+import { User } from '../../types/userTypes'
+import { getAllUsers } from '../../api/user_api'
 import InsertUser from './InsertUser.vue'
 import EditUserComponent from './EditUserComponent.vue'
 import { Loading } from 'quasar'

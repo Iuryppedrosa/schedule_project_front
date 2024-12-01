@@ -20,8 +20,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { UserCreateDTO } from '../types/userTypes'
-import { createUser } from '../api/user_api'
+import { UserCreateDTO } from '../../types/userTypes'
+import { createUser } from '../../api/user_api'
 export default defineComponent({
   name: 'InsertUser',
   props: {

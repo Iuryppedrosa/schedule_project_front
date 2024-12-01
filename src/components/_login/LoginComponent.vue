@@ -36,7 +36,7 @@
 import { defineComponent } from 'vue'
 import { QForm, QInput, QToggle, QBtn } from 'quasar'
 import { Loading } from 'quasar'
-import { useUserStore } from '../stores/userStore'
+import { useUserStore } from '../../stores/userStore'
 export default defineComponent({
   components: { QForm, QInput, QToggle, QBtn },
   name: 'LoginComponent',

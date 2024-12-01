@@ -122,34 +122,88 @@
     ],
     "events": [
         {
-            "start": "2018-10-30 10:35",
-            "end": "2018-10-30 11:30",
-            "title": "Doctor appointment"
+            "start": "2024-12-01 10:00",
+            "end": "2024-12-01 11:00",
+            "title": "Yoga class",
+            "detalhes": "Sessão de yoga para relaxamento e bem-estar."
+        },
+        {
+            "start": "2024-12-02 09:30",
+            "end": "2024-12-02 10:15",
+            "title": "Team meeting",
+            "detalhes": "Reunião de equipe para planejamento semanal."
+        },
+        {
+            "start": "2024-12-03 14:00",
+            "end": "2024-12-03 15:30",
+            "title": "Client presentation",
+            "detalhes": "Apresentação de projeto para o cliente."
+        },
+        {
+            "start": "2024-12-04 16:00",
+            "end": "2024-12-04 17:00",
+            "title": "Gym session",
+            "detalhes": "Treino de musculação e cardio na academia."
+        },
+        {
+            "start": "2024-12-05 13:00",
+            "end": "2024-12-05 14:00",
+            "title": "Lunch with colleague",
+            "detalhes": "Almoço com um colega para discutir ideias de projeto."
+        },
+        {
+            "start": "2024-12-06 08:00",
+            "end": "2024-12-06 08:30",
+            "title": "Morning run",
+            "detalhes": "Corrida matinal no parque."
+        },
+        {
+            "start": "2024-12-07 19:00",
+            "end": "2024-12-07 21:00",
+            "title": "Movie night",
+            "detalhes": "Sessão de cinema com amigos."
         },
         {
             "start": "2018-11-19 10:35",
             "end": "2018-11-19 11:30",
-            "title": "Doctor appointment"
+            "title": "Doctor appointment",
+            "detalhes": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris."
+        },
+        {
+            "start": "2018-11-19 10:35",
+            "end": "2018-11-19 11:30",
+            "title": "Doctor appointment",
+            "detalhes": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris."
         },
         {
             "start": "2018-11-19 18:30",
             "end": "2018-11-19 19:15",
-            "title": "Dentist appointment"
+            "title": "Dentist appointment",
+            "detalhes": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris."
         },
         {
             "start": "2018-11-20 18:30",
             "end": "2018-11-20 20:30",
-            "title": "Crossfit"
+            "title": "Crossfit",
+            "detalhes": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris."
+        },
+        {
+            "start": "2018-11-27 18:30",
+            "end": "2018-11-27 20:30",
+            "title": "Crossfit",
+            "detalhes": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris."
         },
         {
             "start": "2018-11-21 11:00",
             "end": "2018-11-21 13:00",
-            "title": "Brunch with Jane"
+            "title": "Brunch with Jane",
+            "detalhes": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris."
         },
         {
             "start": "2018-11-21 19:30",
             "end": "2018-11-21 23:00",
-            "title": "Swimming lesson"
+            "title": "Swimming lesson",
+            "detalhes": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris."
         }
     ]
 }

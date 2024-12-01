@@ -3,7 +3,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   data() {
     return {
-      baseUrl: 'http://localhost:3000',
+      baseUrl: 'http://localhost:3001',
     }
   },
   methods: {

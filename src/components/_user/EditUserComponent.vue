@@ -20,9 +20,9 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { UserCreateDTO } from '../types/userTypes'
-import { editUser } from '../api/user_api'
-import { getUserById } from '../api/user_api'
+import { UserCreateDTO } from '../../types/userTypes'
+import { editUser } from '../../api/user_api'
+import { getUserById } from '../../api/user_api'
 import { Loading } from 'quasar'
 export default defineComponent({
   name: 'EditUser',
