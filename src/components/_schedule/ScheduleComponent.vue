@@ -2,7 +2,6 @@
   <div class="q-pa-md">
     <vue-cal
       ref="vuecal"
-      watchRealTime="true"
       :events="events"
       :selected-date="selectedDateToday"
       eventsOnMonthView="true"
@@ -14,6 +13,8 @@
       :time-to="22 * 60"
       :time-step="30"
       today-button
+      @view-change="logEvents('view-change', $event)"
+      :on-event-click="expandDayCard"
     >
       <template #today-button>
         <q-btn icon="event" text-color="black" unelevated class="q-px-md" />
@@ -29,11 +30,13 @@
               o objeto event pode receber um parametro class, que define uma class pra ele, podendo estar ser manipulada -->
         <br />
 
-        <em>
-          <strong>Event start:</strong> {{ formatTime(event.start) }}<br />
-          <strong>Event end:</strong> {{ formatTime(event.end) }}
-        </em>
-        <p>{{ event.detalhes }}</p>
+        <div>
+          <em>
+            <strong>Event start:</strong> {{ formatTime(event.start) }}<br />
+            <strong>Event end:</strong> {{ formatTime(event.end) }}
+          </em>
+          <p>{{ event.detalhes }}</p>
+        </div>
       </template>
     </vue-cal>
     <edit-schedule
@@ -49,6 +52,30 @@
       @close="closeDeleteModal"
       @confirm="confirmDelete"
     />
+
+    <q-dialog v-model="showDialog" persistent>
+      <q-card class="teams-card">
+        <q-card-section class="teams-card-header">
+          <q-card-title class="teams-card-title">
+            {{ selectedEvent.title }}
+          </q-card-title>
+        </q-card-section>
+        <q-card-section class="teams-card-content">
+          <slot name="content">
+            <em>
+              <strong>Event start:</strong> {{ formatTime(selectedEvent.start) }}<br />
+              <strong>Event end:</strong> {{ formatTime(selectedEvent.end) }}
+            </em>
+          </slot>
+        </q-card-section>
+        <q-card-section class="teams-card-content">
+          <p>{{ selectedEvent.detalhes }}</p>
+        </q-card-section>
+        <q-card-section class="teams-card-actions">
+          <q-btn label="Fechar" color="primary" @click="showDialog = false" />
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -59,7 +86,7 @@ import 'vue-cal/dist/vuecal.css'
 import { defineComponent } from 'vue'
 import EditScheduleComponent from './EditScheduleComponent.vue'
 import DeleteScheduleComponent from './DeleteScheduleComponent.vue'
-
+import { ref } from 'vue'
 export default defineComponent({
   name: 'ScheduleComponent',
   mixins: [apimixin],
@@ -70,10 +97,11 @@ export default defineComponent({
   },
   data() {
     return {
+      small: ref(false),
       events: [] as Array<{ start: string; end: string; title: string; detalhes: string }>,
-      isEditVisible: false, // Agora está declarada a propriedade
-      selectedEvent: {} as { start: string; end: string; title: string; detalhes: string }, // Também declarada
-      isDeleteVisible: false, // Controla a visibilidade do modal de delete
+      isEditVisible: false,
+      selectedEvent: {} as { start: string; end: string; title: string; detalhes: string },
+      isDeleteVisible: false,
       selectedEventForDeletion: {} as {
         start: string
         end: string
@@ -81,6 +109,8 @@ export default defineComponent({
         detalhes: string
       },
       selectedDateToday: new Date(new Date().getFullYear(), 11, 31),
+      showDialog: false,
+      tab: '',
     }
   },
   methods: {
@@ -92,9 +122,21 @@ export default defineComponent({
       }
       return new Date(date).toLocaleTimeString([], options)
     },
-    onEventClick(event, e) {
-      console.log('Event clicked:', event)
-      console.log('Event clicked:', e)
+
+    logEvents(
+      eventType: string,
+      event: { start: string; end: string; title: string; detalhes: string; view?: string },
+    ) {
+      console.log(eventType, event)
+      this.tab = event.view
+      console.log(this.tab)
+    },
+
+    expandDayCard(event: { start: string; end: string; title: string; detalhes: string }) {
+      if (this.tab === 'day') {
+        this.showDialog = true
+        this.selectedEvent = { ...event }
+      }
     },
     editSchedule(event: { start: string; end: string; title: string; detalhes: string }) {
       // Quando clicar no botão de editar, o evento será passado para o modal
@@ -136,10 +178,72 @@ export default defineComponent({
       console.error('Error fetching events:', error)
     }
   },
+  // mounted() {
+  //   const vueCalElement = this.$refs.vuecal.$el
+  //   const observer = new MutationObserver((mutationsList) => {
+  //     for (const mutation of mutationsList) {
+  //       if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+  //         this.mudança = vueCalElement.classList[2]
+  //         console.log(this.mudança)
+  //       }
+  //     }
+  //   })
+
+  //   observer.observe(vueCalElement, {
+  //     attributes: true,
+  //     attributeFilter: ['class'],
+  //   })
+  //   this.observer = observer
+  // },
+  // beforeUnmount() {
+  //   if (this.observer) {
+  //     this.observer.disconnect()
+  //   }
+  // },
 })
 </script>
 
 <style>
+.teams-card {
+  width: 600px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e1e4e8;
+  background-color: #ffffff;
+}
+
+.teams-card-header {
+  border-bottom: 1px solid #e1e4e8;
+  padding: 16px;
+  background-color: #f3f2f1;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  text-align: center;
+}
+
+.teams-card-title {
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #323130;
+}
+
+.teams-card-content {
+  padding: 16px;
+  color: #605e5c;
+  font-size: 1em;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.teams-card-actions {
+  padding: 16px;
+  text-align: right;
+  border-top: 1px solid #e1e4e8;
+  background-color: #f3f2f1;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
 .bottonsSchedule {
   position: absolute; /* Permite o posicionamento absoluto dos botões dentro do evento */
   top: 1px; /* Ajuste para o topo */
@@ -180,25 +284,17 @@ export default defineComponent({
   padding-bottom: 4px; /* Espaço entre o texto e a linha */
 }
 
+.vuecal--day-view .vuecal__event {
+  border: 2px solid transparent;
+  padding: 10px;
+  position: relative;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+  border-radius: 5px;
+  height: 47px !important;
+}
+
 .vuecal--day-view .vuecal__event:hover {
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Aumento da sombra */
-  transform: scale(0.98); /* Leve aumento no tamanho */
-}
-
-.vuecal--day-view .vuecal__event {
-  border: 2px black solid; /* Leve aumento no tamanho */
-}
-
-.vuecal--day-view .vuecal__event {
-  border: 2px solid transparent; /* Borda invisível para o efeito de brilho */
-  padding: 10px; /* Ajuste do padding */
-  position: relative; /* Para o efeito de sombra */
-}
-
-.vuecal--day-view .vuecal__event {
-  border: 2px solid white; /* Borda branca simples */
-  padding: 10px; /* Ajusta o padding, se necessário */
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6); /* Sombra suave para destacar */
-  border-radius: 5px; /* Borda arredondada (opcional, se preferir cantos mais suaves) */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+  transform: scale(0.98);
 }
 </style>
