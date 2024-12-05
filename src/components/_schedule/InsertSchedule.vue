@@ -54,7 +54,6 @@ export default defineComponent({
         title: '',
         ano: '',
       },
-      isInsertVisible: false,
       events: [],
     }
   },

@@ -1,5 +1,5 @@
 <template>
-  <q-dialog v-model="localVisible" persistent>
+  <q-dialog v-model="isVisible">
     <q-card class="q-pa-md bg-warning text-dark">
       <q-card-section class="row items-center">
         <q-icon name="warning" size="3rem" class="text-red-9" />
@@ -37,10 +37,6 @@ export default defineComponent({
     QIcon,
   },
   props: {
-    isVisible: {
-      type: Boolean,
-      required: true,
-    },
     event: {
       type: Object as () => { start: string; end: string; title: string; detalhes: string },
       required: true,
@@ -49,7 +45,7 @@ export default defineComponent({
   emits: ['close', 'confirm'],
   data() {
     return {
-      localVisible: this.isVisible,
+      isVisible: true,
     }
   },
   watch: {

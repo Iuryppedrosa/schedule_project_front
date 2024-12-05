@@ -14,18 +14,28 @@
       :time-step="30"
       today-button
       @view-change="logEvents('view-change', $event)"
-      :on-event-click="expandDayCard"
+      :on-event-dblclick="expandDayCard"
     >
       <template #today-button>
-        <q-btn icon="event" text-color="black" unelevated class="q-px-md" />
+        <q-btn dense color="black" unelevated icon="my_location" />
       </template>
       <template #event="{ event }">
         <div class="bottonsSchedule">
-          <q-btn flat dense icon="edit" color="blue" @click="editSchedule(event)" />
-          <q-btn flat dense icon="delete" color="red" @click="deleteSchedule(event)" />
+          <q-btn flat dense icon="edit" color="blue" @click.stop="editSchedule(event)" />
+          <q-btn flat dense icon="delete" color="red" @click.stop="deleteSchedule(event)" />
         </div>
 
         <span v-html="event.title" class="event-title"></span>
+
+        <q-tooltip
+          v-if="this.tab === 'day'"
+          anchor="top middle"
+          self="bottom middle"
+          :offset="[10, 10]"
+        >
+          <em>click 2x</em> (<q-icon name="keyboard_arrow_up" />)
+        </q-tooltip>
+
         <!-- TODO:
               o objeto event pode receber um parametro class, que define uma class pra ele, podendo estar ser manipulada -->
         <br />
@@ -47,13 +57,13 @@
     />
 
     <delete-schedule-component
-      :isVisible="isDeleteVisible"
+      v-if="isDeleteVisible"
       :event="selectedEventForDeletion"
       @close="closeDeleteModal"
       @confirm="confirmDelete"
     />
 
-    <q-dialog v-model="showDialog" persistent>
+    <q-dialog v-model="showDialogBox">
       <q-card class="teams-card">
         <q-card-section class="teams-card-header">
           <q-card-title class="teams-card-title">
@@ -72,7 +82,7 @@
           <p>{{ selectedEvent.detalhes }}</p>
         </q-card-section>
         <q-card-section class="teams-card-actions">
-          <q-btn label="Fechar" color="primary" @click="showDialog = false" />
+          <q-btn label="Fechar" color="primary" @click="showDialogBox = false" />
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -81,7 +91,6 @@
 
 <script lang="ts">
 import VueCal from 'vue-cal'
-import apimixin from '../../api/api'
 import 'vue-cal/dist/vuecal.css'
 import { defineComponent } from 'vue'
 import EditScheduleComponent from './EditScheduleComponent.vue'
@@ -89,7 +98,6 @@ import DeleteScheduleComponent from './DeleteScheduleComponent.vue'
 import { ref } from 'vue'
 export default defineComponent({
   name: 'ScheduleComponent',
-  mixins: [apimixin],
   components: {
     VueCal,
     EditSchedule: EditScheduleComponent,
@@ -98,18 +106,110 @@ export default defineComponent({
   data() {
     return {
       small: ref(false),
-      events: [] as Array<{ start: string; end: string; title: string; detalhes: string }>,
+      events: [
+        {
+          start: '2024-12-01 10:00',
+          end: '2024-12-01 11:00',
+          title: 'Yoga class',
+          detalhes: 'Sessão de yoga para relaxamento e bem-estar.',
+        },
+        {
+          start: '2024-12-02 09:30',
+          end: '2024-12-02 10:15',
+          title: 'Team meeting',
+          detalhes: 'Reunião de equipe para planejamento semanal.',
+        },
+        {
+          start: '2024-12-03 14:00',
+          end: '2024-12-03 15:30',
+          title: 'Client presentation',
+          detalhes: 'Apresentação de projeto para o cliente.',
+        },
+        {
+          start: '2024-12-04 16:00',
+          end: '2024-12-04 17:00',
+          title: 'Gym session',
+          detalhes: 'Treino de musculação e cardio na academia.',
+        },
+        {
+          start: '2024-12-05 13:00',
+          end: '2024-12-05 14:00',
+          title: 'Lunch with colleague',
+          detalhes: 'Almoço com um colega para discutir ideias de projeto.',
+        },
+        {
+          start: '2024-12-06 08:00',
+          end: '2024-12-06 08:30',
+          title: 'Morning run',
+          detalhes: 'Corrida matinal no parque.',
+        },
+        {
+          start: '2024-12-07 19:00',
+          end: '2024-12-07 21:00',
+          title: 'Movie night',
+          detalhes: 'Sessão de cinema com amigos.',
+        },
+        {
+          start: '2018-11-19 10:35',
+          end: '2018-11-19 11:30',
+          title: 'Doctor appointment',
+          detalhes:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris.',
+        },
+        {
+          start: '2018-11-19 10:35',
+          end: '2018-11-19 11:30',
+          title: 'Doctor appointment',
+          detalhes:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris.',
+        },
+        {
+          start: '2018-11-19 18:30',
+          end: '2018-11-19 19:15',
+          title: 'Dentist appointment',
+          detalhes:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris.',
+        },
+        {
+          start: '2018-11-20 18:30',
+          end: '2018-11-20 20:30',
+          title: 'Crossfit',
+          detalhes:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris.',
+        },
+        {
+          start: '2018-11-27 18:30',
+          end: '2018-11-27 20:30',
+          title: 'Crossfit',
+          detalhes:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris.',
+        },
+        {
+          start: '2018-11-21 11:00',
+          end: '2018-11-21 13:00',
+          title: 'Brunch with Jane',
+          detalhes:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris.',
+        },
+        {
+          start: '2018-11-21 19:30',
+          end: '2018-11-21 23:00',
+          title: 'Swimming lesson',
+          detalhes:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris.',
+        },
+      ] as Array<{ start: string; end: string; title: string; detalhes: string }>,
       isEditVisible: false,
-      selectedEvent: {} as { start: string; end: string; title: string; detalhes: string },
-      isDeleteVisible: false,
-      selectedEventForDeletion: {} as {
-        start: string
-        end: string
-        title: string
-        detalhes: string
+      selectedEvent: {
+        start: '',
+        end: '',
+        title: '',
+        detalhes: '',
       },
+      isDeleteVisible: false,
+      selectedEventForDeletion: { start: '', end: '', title: '', detalhes: '' },
       selectedDateToday: new Date(new Date().getFullYear(), 11, 31),
-      showDialog: false,
+      showDialogBox: false,
       tab: '',
     }
   },
@@ -123,23 +223,19 @@ export default defineComponent({
       return new Date(date).toLocaleTimeString([], options)
     },
 
-    logEvents(
-      eventType: string,
-      event: { start: string; end: string; title: string; detalhes: string; view?: string },
-    ) {
-      console.log(eventType, event)
+    logEvents(eventType: string, event: { view: string }) {
       this.tab = event.view
       console.log(this.tab)
     },
 
     expandDayCard(event: { start: string; end: string; title: string; detalhes: string }) {
+      console.log('teste')
       if (this.tab === 'day') {
-        this.showDialog = true
+        this.showDialogBox = true
         this.selectedEvent = { ...event }
       }
     },
     editSchedule(event: { start: string; end: string; title: string; detalhes: string }) {
-      // Quando clicar no botão de editar, o evento será passado para o modal
       this.selectedEvent = { ...event }
       this.isEditVisible = true
     },

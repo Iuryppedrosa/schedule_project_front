@@ -33,8 +33,8 @@ export default defineComponent({
   },
   data() {
     return {
-      isVisible: true, // O modal está visível ao ser exibido
-      localEvent: { ...this.event }, // Cria uma cópia local do evento
+      isVisible: true,
+      localEvent: { ...this.event },
     }
   },
   methods: {
