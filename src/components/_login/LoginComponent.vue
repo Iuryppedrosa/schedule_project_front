@@ -20,7 +20,7 @@
             :rules="[(val) => (val !== null && val !== '') || 'Digite alguma coisa']"
           />
 
-          <q-toggle v-model="accept" label="Eu aceito os termos de licenca" />
+          <q-toggle v-model="accept" label="Eu aceito os termos de licença" />
           <div class="bottons">
             <q-btn label="Submit" type="submit" color="primary" />
 
@@ -85,7 +85,7 @@ export default defineComponent({
       }
     },
     onReset() {
-      this.userInput.username = ''
+      this.userInput.email = ''
       this.userInput.password = ''
       this.accept = false
     },
@@ -94,15 +94,13 @@ export default defineComponent({
 </script>
 
 <style scoped>
-/* Fundo */
 .background {
-  background-image: url('../../public/img_login.png') !important;
-  opacity: 0.8;
+  background: url('../../assets/fundo_.png') no-repeat !important;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  width: 100%;
   height: 100vh;
+  width: 100%;
   position: relative;
 }
 
@@ -111,15 +109,14 @@ export default defineComponent({
   width: 350px;
   padding: 20px;
   background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
   position: absolute;
   top: 50%;
-  left: 70%;
-  transform: translate(-50%, -50%); /* Centraliza o card */
+  left: 81.8%;
+  transform: translate(-50%, -50%);
 }
 
-/* Título dentro do Card */
 .q-card .q-pa-md {
   text-align: center;
   margin-bottom: 20px;
@@ -127,7 +124,6 @@ export default defineComponent({
   color: #333;
 }
 
-/* Estilo dos campos de entrada */
 .q-input {
   border-radius: 8px;
   background-color: #f4f6f8;
@@ -139,29 +135,20 @@ export default defineComponent({
   align-content: center;
 }
 
-/* Estilo dos botões */
 .q-btn[type='submit'],
 .q-btn[type='reset'] {
-  width: 100%; /* Garantindo que os botões ocupem 100% da largura disponível */
-  margin-top: 10px; /* Adicionando espaçamento entre os botões */
+  width: 100%;
+  margin-top: 10px;
   border-radius: 8px;
   font-weight: bold;
   padding: 10px;
 }
 
-/* Botão de Submit */
-.q-btn[type='submit'] {
-  background-color: #4caf50;
-  color: white;
-}
-
-/* Botão de Reset */
 .q-btn[type='reset'] {
-  background-color: #f44336;
-  color: white;
+  background-image: linear-gradient(to right, #d31027 0%, #ea384d 51%, #d31027 100%);
+  color: white !important;
 }
 
-/* Tamanho da fonte das labels e input */
 .q-input label {
   font-size: 14px;
   font-weight: 600;
@@ -170,15 +157,6 @@ export default defineComponent({
 .q-toggle {
   margin-top: 10px;
   font-size: 14px;
-}
-
-/* Estilo para inputs com validação */
-.q-input--filled .q-field__control {
-  border: 2px solid #4caf50;
-}
-
-.q-btn:hover {
-  opacity: 0.9;
 }
 
 /* Estilo para o aviso de notificação */
