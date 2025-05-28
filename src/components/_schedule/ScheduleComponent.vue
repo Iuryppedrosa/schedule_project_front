@@ -28,7 +28,7 @@
         <span v-html="event.title" class="event-title"></span>
 
         <q-tooltip
-          v-if="this.tab === 'day'"
+          v-if="event && tab === 'day'"
           anchor="top middle"
           self="bottom middle"
           :offset="[10, 10]"
@@ -302,32 +302,48 @@ export default defineComponent({
 <style>
 .teams-card {
   width: 600px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
   border: 1px solid #e1e4e8;
-  background-color: #ffffff;
+  background: linear-gradient(135deg, #f8fafc 60%, #e3e6f3 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ícone/avatar no topo do modal */
+.teams-card::before {
+  content: '\1F4C5'; /* Emoji de calendário */
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2.2em;
+  opacity: 0.18;
+  pointer-events: none;
 }
 
 .teams-card-header {
   border-bottom: 1px solid #e1e4e8;
-  padding: 16px;
-  background-color: #f3f2f1;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  padding: 24px 16px 8px 16px;
+  background: transparent;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
   text-align: center;
 }
 
 .teams-card-title {
-  font-size: 1.2em;
-  font-weight: 600;
-  color: #323130;
+  font-size: 1.5em;
+  font-weight: 700;
+  color: #2d2e83;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.2em;
 }
 
 .teams-card-content {
-  padding: 16px;
+  padding: 18px 16px;
   color: #605e5c;
-  font-size: 1em;
-  line-height: 1.5;
+  font-size: 1.08em;
+  line-height: 1.6;
   text-align: center;
 }
 
@@ -335,62 +351,132 @@ export default defineComponent({
   padding: 16px;
   text-align: right;
   border-top: 1px solid #e1e4e8;
-  background-color: #f3f2f1;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
+  background: #f3f2f1cc;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
 }
 
+/* Botões de ação circulares com sombra */
 .bottonsSchedule {
-  position: absolute; /* Permite o posicionamento absoluto dos botões dentro do evento */
-  top: 1px; /* Ajuste para o topo */
-  right: -3px; /* Ajuste para o lado direito */
-  display: flex; /* Exibe os botões lado a lado */
-  gap: -2px; /* Espaçamento entre os botões */
-  z-index: 1; /* Garante que os botões fiquem acima do conteúdo do evento */
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  gap: 6px;
+  z-index: 2;
+}
+.bottonsSchedule .q-btn {
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.12);
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    box-shadow 0.2s,
+    background 0.2s,
+    transform 0.2s;
+}
+.bottonsSchedule .q-btn:hover {
+  background: #e3e6f3;
+  box-shadow: 0 4px 16px rgba(44, 62, 80, 0.18);
+  transform: scale(1.08);
 }
 
+/* Tooltip customizado */
+.q-tooltip {
+  background: #2d2e83;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 1em;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.18);
+  padding: 8px 14px;
+}
+
+/* Glassmorphism nos eventos */
 .vuecal__event {
   cursor: pointer;
   margin-bottom: 10px;
   width: 90%;
   padding: 5px;
   margin: 0 auto 10px;
-  background-color: #444791; /* Cor de base */
-  color: #ffffff; /* Cor do texto para bom contraste */
-  border-radius: 4px; /* Cantos arredondados */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
-  padding: 16px; /* Espaçamento interno */
+  background: rgba(68, 71, 145, 0.65);
+  color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px 0 rgba(44, 62, 80, 0.1);
+  padding: 18px;
+  backdrop-filter: blur(4px);
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease; /* Suavidade no hover */
+    transform 0.22s cubic-bezier(0.4, 2, 0.6, 1),
+    box-shadow 0.22s cubic-bezier(0.4, 2, 0.6, 1),
+    background 0.22s;
+  position: relative;
 }
 .vuecal__event:hover {
-  background-color: hsl(238, 36%, 50%); /* Leve clareamento */
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Aumento da sombra */
-  transform: scale(1.02); /* Leve aumento no tamanho */
+  background: rgba(68, 71, 145, 0.82);
+  box-shadow: 0 8px 24px rgba(44, 62, 80, 0.22);
+  transform: scale(1.04);
+}
+
+/* Badge/chip de categoria (exemplo visual, precisa ser adicionado no template se quiser usar) */
+.event-category {
+  display: inline-block;
+  background: linear-gradient(90deg, #2d2e83 60%, #444791 100%);
+  color: #fff;
+  font-size: 0.85em;
+  font-weight: 600;
+  border-radius: 12px;
+  padding: 2px 12px;
+  margin-bottom: 6px;
+  margin-right: 6px;
+  box-shadow: 0 1px 4px rgba(44, 62, 80, 0.1);
+  letter-spacing: 0.5px;
 }
 
 .event-title {
-  font-size: 1.4em; /* Aumenta o tamanho da fonte */
-  font-weight: 600; /* Deixa o texto semi-negrito */
-  color: #ffffff9a; /* Garante contraste com o fundo */
-  margin: 4px 0 12px; /* Ajusta margens para espaçamento */
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); /* Adiciona destaque com sombra */
-  border-bottom: 2px solid rgba(255, 255, 255, 0.2); /* Linha sutil para separação */
-  padding-bottom: 4px; /* Espaço entre o texto e a linha */
+  font-size: 1.4em;
+  font-weight: 700;
+  color: #fff;
+  margin: 4px 0 12px;
+  text-shadow: 1px 1px 4px rgba(44, 62, 80, 0.25);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.18);
+  padding-bottom: 4px;
+  letter-spacing: 0.5px;
 }
 
 .vuecal--day-view .vuecal__event {
   border: 2px solid transparent;
-  padding: 10px;
+  padding: 12px;
   position: relative;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
-  border-radius: 5px;
-  height: 47px !important;
+  border-radius: 10px;
+  height: 54px !important;
 }
 
 .vuecal--day-view .vuecal__event:hover {
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 20px rgba(44, 62, 80, 0.18);
   transform: scale(0.98);
+}
+
+/* Cores dinâmicas para eventos (exemplo, pode ser expandido via :class no template) */
+.vuecal__event.color-1 {
+  background: rgba(44, 62, 80, 0.65);
+}
+.vuecal__event.color-2 {
+  background: rgba(68, 71, 145, 0.65);
+}
+.vuecal__event.color-3 {
+  background: rgba(45, 46, 131, 0.65);
+}
+.vuecal__event.color-4 {
+  background: rgba(34, 193, 195, 0.65);
+}
+.vuecal__event.color-5 {
+  background: rgba(253, 187, 45, 0.65);
+  color: #333;
 }
 </style>

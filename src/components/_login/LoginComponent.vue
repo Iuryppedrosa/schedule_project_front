@@ -95,73 +95,93 @@ export default defineComponent({
 
 <style scoped>
 .background {
-  background: url('../../assets/fundo_.png') no-repeat !important;
+  background: url('../../assets/fundo_.png') no-repeat center center;
   background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   height: 100vh;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
 }
 
-/* Estilo do Card de Login */
 .login {
-  width: 350px;
-  padding: 20px;
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 5px;
-  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+  width: 380px;
+  padding: 30px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 10px;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
   position: absolute;
-  top: 50%;
-  left: 81.8%;
-  transform: translate(-50%, -50%);
+  right: 10%;
 }
 
 .q-card .q-pa-md {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   font-weight: bold;
   color: #333;
 }
 
 .q-input {
   border-radius: 8px;
-  background-color: #f4f6f8;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .bottons {
   display: flex;
-  align-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
-.q-btn[type='submit'],
-.q-btn[type='reset'] {
+.q-btn {
   width: 100%;
-  margin-top: 10px;
   border-radius: 8px;
   font-weight: bold;
-  padding: 10px;
+  padding: 12px;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
+}
+
+.q-btn:hover {
+  transform: translateY(-2px);
+}
+
+.q-btn[type='submit'] {
+  background-image: linear-gradient(to right, #007bff 0%, #0056b3 51%, #007bff 100%);
+  color: white !important;
+}
+
+.q-btn[type='submit']:hover {
+  background-image: linear-gradient(to right, #0056b3 0%, #007bff 51%, #0056b3 100%);
 }
 
 .q-btn[type='reset'] {
-  background-image: linear-gradient(to right, #d31027 0%, #ea384d 51%, #d31027 100%);
+  background-image: linear-gradient(to right, #6c757d 0%, #5a6268 51%, #6c757d 100%);
   color: white !important;
+}
+
+.q-btn[type='reset']:hover {
+  background-image: linear-gradient(to right, #5a6268 0%, #6c757d 51%, #5a6268 100%);
 }
 
 .q-input label {
   font-size: 14px;
   font-weight: 600;
+  color: #555;
 }
 
 .q-toggle {
-  margin-top: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
   font-size: 14px;
+  color: #444;
 }
 
 /* Estilo para o aviso de notificação */
 .q-notify {
-  font-size: 14px;
-  border-radius: 5px;
+  font-size: 15px;
+  border-radius: 8px;
 }
 </style>
